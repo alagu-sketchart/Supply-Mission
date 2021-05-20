@@ -1,11 +1,12 @@
 const Engine = Matter.Engine;
 const Bodies = Matter.Bodies;
-const Body = Matter.Bodies;
+const Body = Matter.Body;
 const World = Matter.World;
 
 var helicopterIMG, helicopterSprite, packageSprite ,packageIMG;
 var world, engine;
-var ground, packageBody;
+var ground, packageBody, box1, box2, box3;
+var packageBody_p;
 
 function preload(){
 helicopterIMG = loadImage("helicopter.png");
@@ -13,7 +14,7 @@ packageIMG = loadImage("package.png");
 }
 
 function setup(){
-  createCanvas(700,800);
+  createCanvas(700,700);
   rectMode(CENTER);
   engine = Engine.create();
   world = engine.world;
@@ -26,44 +27,38 @@ function setup(){
 	helicopterSprite.addImage(helicopterIMG);
   helicopterSprite.scale = 0.6
   
-  ground = createSprite(width/2, height-150, width, 20);
+  ground = createSprite(width/2, height-200, width, 10);
   ground.shapeColor = color(255);
+
+  box1 = new Boxes(275, height-250, 15, 85);
+  box2 = new Boxes(350, height-215, 165, 15);
+  box3 = new Boxes(425, height-250, 15, 85);
 
 var ground_p = {
     isStatic : true 
 }
 
-  ground = Bodies.rectangle(width/2, 650, 100, 40, ground_p);
-  World.add(world, ground);
-
-  var packageBody_p = {
-    restitution: 0.5 
-}
-
-packageBody = Bodies.circle(width/2,100,20,packageBody_p);
+  ground = Bodies.rectangle(width/2, 930, 100, 20, ground_p);
+  packageBody = Bodies.circle(width/2,100,20,packageBody_p);
 }
 
 function draw(){
   background(0);
   Engine.update(engine);
   packageSprite.y = packageBody.position.y
-  
-  rectMode(CENTER);
-    rect(ground.position.x,ground.position.y,400,20);
-
-    ellipseMode(RADIUS);
-    ellipse(packageBody.position.x, packageBody.position.y, 20, 20);
+  packageSprite.x = packageBody.position.x
+  box1.display();
+  box2.display();
+  box3.display();
   drawSprites();
 }
 
 function keyPressed() {
-  if (keyCode === DOWN_ARROW) {
-     //Look at the hints in the document and understand how to make the package body fall only on press of the Down arrow key.
-   
-     var packageBody_p = {
-     restitution: 0.5
-   }
-   packageBody = Bodies.circle(width/2,100,20,packageBody_p);
-   World.add(world,packageBody);
-   }
- }
+        if (keyCode === DOWN_ARROW) {
+          var packageBody_p = {
+          restitution: 0.5
+        }
+      packageBody = Bodies.circle(width/2,100,20,packageBody_p);
+      World.add(world,packageBody);
+    }
+}
